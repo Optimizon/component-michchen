@@ -23,8 +23,13 @@ app.get('/get', (req, res) => {
   db.getProduct(req.query.id, (data) => {
     res.header('Access-Control-Allow-Origin', '*');
     res.send(data);
+    console.log('this is data', data)
   });
 });
+
+app.post('/get', (req, res) => {
+
+})
 
 app.get('/test', (req, res) => {
   res.send('test');

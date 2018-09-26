@@ -1,10 +1,9 @@
 const mysql = require('mysql');
-// console.log(process.env);
+console.log(process.env);
 const con = mysql.createConnection({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASS,
-  database: 'hramazon',
+  host: 'localhost',
+  user: 'root',
+  database: 'amazon',
   // port: 9001
 });
 
@@ -48,8 +47,8 @@ exports.insertRow = (query, cb) => {
 };
 
 exports.getProduct = (id, cb) => {
-  console.log('exports.getProduct');
-  console.log(`SELECT * FROM products WHERE id=${id}`);
+  // console.log('exports.getProduct');
+  // console.log(`SELECT * FROM products WHERE id=${id}`);
 
   con.query(`SELECT * FROM products WHERE id=${id}`, (err, result) => {
     // console.log('selected sucessfully from products');
@@ -79,3 +78,9 @@ exports.getProduct = (id, cb) => {
     });
   });
 };
+
+// exports.getProduct = (id, cb) => {
+//   con.query(`SELECT * FROM images WHERE id=${id}`, (err, result) => {
+//     cb(result);
+//   })
+// }
