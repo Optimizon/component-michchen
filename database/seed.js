@@ -3,7 +3,7 @@
 // run "node database/faker.js" in the terminal
 // node database/seed.js
 
-const numToGenerate = 100;
+const numToGenerate = 10000000;
 
 /*
 INSERT INTO products (id, productName, productUrl, sellerName, sellerUrl,
@@ -138,7 +138,7 @@ exports.createImageQuery = function createImageQuery(howMany) {
   return `${queryConcat};`;
 };
 
-console.log(exports.createProductQuery(100));
+// console.log(exports.createProductQuery(100));
 
 
 // reset products table and insert rows

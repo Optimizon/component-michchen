@@ -1,5 +1,5 @@
 const mysql = require('mysql');
-console.log(process.env);
+// console.log(process.env);
 const con = mysql.createConnection({
   host: 'localhost',
   user: 'root',
@@ -26,7 +26,7 @@ con.connect((err) => {
 });
 
 // for creating fake data (faker.js)
-exports.resetTable = (table, cb) => {
+const resetTable = (table, cb) => {
   con.query(`DELETE FROM ${table};`, () => {
     console.log(`DELETED TABLE ${table}`);
     con.query(`ALTER TABLE ${table} AUTO_INCREMENT=1;`, () => {
@@ -36,7 +36,7 @@ exports.resetTable = (table, cb) => {
   });
 };
 
-exports.insertRow = (query, cb) => {
+const insertRow = (query, cb) => {
   con.query(query, (err, res) => {
     if (err) {
       console.log(err);
@@ -46,7 +46,7 @@ exports.insertRow = (query, cb) => {
   });
 };
 
-exports.getProduct = (id, cb) => {
+const getProduct = (id, cb) => {
   // console.log('exports.getProduct');
   // console.log(`SELECT * FROM products WHERE id=${id}`);
 
@@ -79,8 +79,36 @@ exports.getProduct = (id, cb) => {
   });
 };
 
-// exports.getProduct = (id, cb) => {
-//   con.query(`SELECT * FROM images WHERE id=${id}`, (err, result) => {
-//     cb(result);
-//   })
-// }
+const postProduct = (entry, cb) => {
+  console.log('request recieved', entry)
+  con.query(`INSERT INTO products (productName, sellerName, ratingsAverage, ratingsCount, questionsCount, amazonsChoice, categoryName, price, priceList, freeReturns, freeShipping, soldByName, available, hasCountdown, description, usedCount, usedPrice) VALUES ("${entry["productName"]}", "${entry["sellerName"]}", ${entry["ratingsAverage"]}, ${entry["ratingsCount"]}, ${entry["questionsCount"]}, "${entry["amazonsChoice"]}", "${entry["categoryName"]}", ${entry["price"]}, ${entry["priceList"]}, ${entry["freeReturns"]}, ${entry["freeShipping"]}, "${entry["soldByName"]}", ${entry["available"]}, ${entry["hasCountdown"]}, "${entry["description"]}", ${entry["usedCount"]}, ${entry["usedPrice"]})`, cb)
+}
+
+const updateProduct = (id, cb) => {
+  con.query('UPDATE product SET column = ? WHERE id = ?', [ id ], cb)
+}
+
+
+const deleteProduct = (id, cb) => {
+  var query = `DELETE FROM products where id = ${id}`
+  con.query(query, (err, results) => {
+    if (err) {
+      cb(err)
+    } else {
+      var query2 = `DELETE FROM images where id = ${id}`
+      con.query(query2, (err, results) => {
+        if (err) {
+          cb(err)
+        } else {
+          cb(results)
+        }
+      })
+    }
+  })
+};
+module.exports = {
+  deleteProduct,
+  updateProduct,
+  getProduct,
+  postProduct,
+}
