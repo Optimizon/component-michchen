@@ -6,8 +6,8 @@ console.time('Task completed in');
 
 var looped = 1;
 var currentIteration = 1;
-var maxLoop = 10;
-var timesPerLoop = 100;
+var maxLoop = 40;
+var timesPerLoop = 250000;
 
 
 const variations = [
@@ -42,6 +42,7 @@ function randomNumFromRange(
 };
 
   var csvWrite = csvWriter({ headers: ["productname", "sellername", "ratingsaverage", "ratingscount", "questionscount", "amazonschoice", "categoryname", "pricelist", "price", "freereturns", "free_shipping", "sold_byname", "available", "hascountdown", "description", "usedcount", "usedprice", "productid", "varkey", "varvalue", "imageurl"]});
+  csvWrite.pipe(fs.createWriteStream('../csvData1.csv', {'flags': 'a'}));
 
 
 function retainer(currentLoop) {
@@ -56,7 +57,6 @@ function retainer(currentLoop) {
     const productPrice = listPrice * (randomNumFromRange(80, 95) / 100);
     const usedP = productPrice * (randomNumFromRange(50, 95) / 100);
     const categoryObj = variations[Math.round(Math.random())];
-
 
     var data = [
       "shirt"+currentIteration,
@@ -83,10 +83,10 @@ function retainer(currentLoop) {
       ]
     currentIteration++;
     bucket += data;
-  }
-    csvWrite.pipe(fs.createWriteStream('../csvData1.csv', {'flags': 'a'}));
-    console.log(`at current#${currentLoop}`)
     csvWrite.write(data)
+
+  }
+    console.log(`at current#${currentLoop}`)
     looped++
     retainer(looped);
   }
