@@ -3,7 +3,7 @@
 // run "node database/faker.js" in the terminal
 // node database/seed.js
 
-const numToGenerate = 10000000;
+const numToGenerate = 1000;
 
 /*
 INSERT INTO products (id, productName, productUrl, sellerName, sellerUrl,
@@ -18,7 +18,6 @@ et aliquet ex. Vivamus justo magna, tincidunt a convallis eu, semper vitae nunc.
 \nSed tincidunt quis purus vitae dictum. \nDonec eu ante pharetra, maximus erat
 sit amet, imperdiet odio. \nIn tincidunt feugiat ligula, quis tempus leo eleifend
 in. Pellentesque vitae lectus est.", 20, 30749);
-
 INSERT INTO images (productId,varKey,varValue,imageUrl) VALUES (101, "","",
 "https://images-na.ssl-images-amazon.com/images/I/61Rh3tVbr-L._SL1200_.jpg");
 */
@@ -138,14 +137,13 @@ exports.createImageQuery = function createImageQuery(howMany) {
   return `${queryConcat};`;
 };
 
-// console.log(exports.createProductQuery(100));
+console.log(exports.createProductQuery(100));
 
 
 // reset products table and insert rows
 db.resetTable('products', () => {
   db.insertRow(exports.createProductQuery(numToGenerate), () => {
     console.log(`  INSERTED ${numToGenerate} ROWS into products`);
-
     // reset images table and insert rows
     db.resetTable('images', () => {
       db.insertRow(exports.createImageQuery(numToGenerate), () => {
@@ -156,6 +154,3 @@ db.resetTable('products', () => {
     });
   });
 });
-
-
-
