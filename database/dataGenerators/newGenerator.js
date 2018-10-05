@@ -116,8 +116,6 @@ function retainer(currentLoop) {
       imageURL: cats[i % cats.length],
     }
     currentIteration++;
-
-
     data = JSON.stringify(data);
     if (currentIteration === ((maxLoop * timesPerLoop)+1)) {
       bucket += data + "\n" + ']';

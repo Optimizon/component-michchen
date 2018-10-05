@@ -41,8 +41,8 @@ function randomNumFromRange(
         * (upperBound - lowerBound) + lowerBound, decimalPlaces);
 };
 
-  var csvWrite = csvWriter({ headers: ["productName", "sellerName", "ratingsAverage", "ratingsCount", "questionsCount", "amazonsChoice", "categoryName", "priceList", "price", "freeReturns", "freeShipping", "soldByName", "available", "hasCountdown", "description", "usedCount", "usedPrice", "productId", "varKey", "varValue", "imageUrl"]});
-  csvWrite.pipe(fs.createWriteStream('../data/csvData2.csv', {'flags': 'a'}));
+  var csvWrite = csvWriter({ headers: ["productName", "sellerName", "ratingsAverage", "ratingsCount", "questionsCount", "amazonsChoice", "categoryName", "priceList", "price", "freeReturns", "freeShipping", "soldByName", "available", "hasCountdown", "description", "usedCount", "usedPrice", "Id", "varKey", "varValue", "imageUrl"]});
+  csvWrite.pipe(fs.createWriteStream('../data/csvData.csv', {'flags': 'a'}));
 
 
 function retainer(currentLoop) {
