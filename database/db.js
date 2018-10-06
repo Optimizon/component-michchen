@@ -36,9 +36,11 @@ const postProduct = (entry, cb) => {
     VALUES ('${entry["productname"]}', '${entry["sellername"]}', ${entry["ratingsaverage"]}, ${entry["ratingscount"]}, ${entry["questionscount"]}, '${entry["amazonschoice"]}', '${entry["categoryname"]}', ${entry["pricelist"]}, ${entry["price"]}, ${entry["freereturns"]}, ${entry["freeshipping"]}, '${entry["soldbyname"]}', ${entry["available"]}, ${entry["hascountdown"]}, '${entry["description"]}', ${entry["usedcount"]}, ${entry["usedprice"]}, ${entry["id"]}, '${entry["varkey"]}', '${entry["varvalue"]}', '${entry["imageurl"]}')`, cb)
 }
 
-// const updateProduct = (id, cb) => {
-//   client.query('UPDATE product SET column = ? WHERE id = ?', [ id ], cb)
-// }
+const updateProduct = (id, entry, cb) => {
+  var queryString =  `UPDATE amazonproducts.products SET productname = '${entry["productname"]}', sellername = '${entry["sellername"]}', categoryname = '${entry["categoryname"]}', price = ${entry["price"]}, soldbyname = '${entry["soldbyname"]}', available = ${entry["available"]}, description = '${entry["description"]}', imageurl = '${entry["imageurl"]}' WHERE id = ${id}`
+  console.log('THIS IS THE QUERY!!!!!!!!!!!', queryString)
+  client.query(queryString, cb)
+}
 
 
 const deleteProduct = (id, cb) => {
@@ -48,7 +50,7 @@ const deleteProduct = (id, cb) => {
 
 module.exports = {
   deleteProduct,
-
+  updateProduct,
   getProduct,
   postProduct,
 }

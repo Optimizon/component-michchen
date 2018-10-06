@@ -6,7 +6,7 @@ const cors = require('cors');
 const pg = require("pg");
 
 const app = express();
-const {deleteProduct, getProduct, postProduct} = require('./database/db.js');
+const {deleteProduct, updateProduct, getProduct, postProduct} = require('./database/db.js');
 
 const corsOptions = {
   origin: 'http://localhost:9002',
@@ -22,12 +22,12 @@ app.get('/get', (req, res) => {
   getProduct(req.query.id, (data) => {
     res.header('Access-Control-Allow-Origin', '*');
     console.log('this is data.rows', data.rows)
-    res.send(data.rows);
+    res.send(data.rows[0]);
   });
 });
 
 app.post('/post', bodyParser(), (req, res) => {
-  console.log('this is req.body!!!!!!!', req.body)
+  // console.log('this is req.body', req.body)
   postProduct(req.body, (err, results) => {
     if (err) {
       console.log('erroring in post', err)
@@ -52,9 +52,9 @@ app.delete('/get/:id', (req, res) => {
   })
 })
 
-app.put('/get/:id', (req, res) => {
+app.put('/post/:id', bodyParser(), (req, res) => {
   const {id} = req.params;
-  updateProduct(id, (err, results) => {
+  updateProduct(id, req.body, (err, results) => {
     if (err) {
       res.status(500).send(err)
     } else {
