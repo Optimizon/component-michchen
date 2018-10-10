@@ -1,10 +1,10 @@
-require('dotenv').config();
-const morgan = require('morgan');
-const bodyParser = require('body-parser');
 const express = require('express');
+// const morgan = require('morgan');
+const bodyParser = require('body-parser');
 const path = require('path');
 const cors = require('cors');
-
+const pg = require("pg");
+const newRelic = require("newRelic");
 const app = express();
 const {deleteProduct, updateProduct, getProduct, postProduct} = require('./database/db.js');
 
@@ -14,40 +14,53 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 // app.use(bodyParser.json();
-app.use(morgan(':method :url :status :res[content-length] - :response-time ms'));
+// app.use(morgan(':method :url :status :res[content-length] - :response-time ms'));
 app.use('/', express.static(path.join(__dirname, '/client/dist')));
-// app.use('/', express.static(__dirname + '/client/dist'));
 
 app.get('/get', (req, res) => {
+  // console.log("got here!")
+  // console.log("requessst", req.query.id);
   // req.query is the URL query string, and 'id' is the product id i wish to fetch
   getProduct(req.query.id, (data) => {
     res.header('Access-Control-Allow-Origin', '*');
-    res.send(data);
+    const { productname, sellername, ratingsaverage, ratingscount, questionscount, amazonschoice, categoryname, pricelist, price, freereturns, freeshipping, soldbyname, available, hascountdown, description, usedcount, usedprice, id, varkey, varvalue, imageurl } = data.rows[0];
+    // console.log('this is data.rows', data.rows)
+      var reshapedData = 
+      { productName: productname,
+        sellerName: sellername,
+        ratingsAverage: ratingsaverage,
+        ratingsCount: ratingscount,
+        questionsCount: questionscount,
+        amazonsChoice: amazonschoice,
+        categoryName: categoryname,
+        priceList: pricelist,
+        price,
+        freeReturns: freereturns,
+        freeShipping: freeshipping,
+        soldByName: soldbyname,
+        available,
+        hasCountdown: hascountdown,
+        description,
+        usedCount: usedcount,
+        usedPrice: usedprice,
+        id,
+        varKey: varkey,
+        varValue: varvalue,
+        imageUrl: imageurl 
+      }
+    res.send(reshapedData);
+    // return data.rows[0];
   });
 });
 
-// app.post('/get', bodyParser(), (req, res) => {
-//   const data  = req.body;
-//   console.log('this is req.body', data);
-  // postProduct((err, data) => {
-  //   if (err) {
-  //     // console.log('this is post request data', data)
-  //     res.status(500) 
-  //     } else {
-  //     console.log('1 entry added')
-  //     }
-  //   }
-  // )
-// })
-
 app.post('/post', bodyParser(), (req, res) => {
-  console.log('this is req.body!!!!!!!', req.body)
+  // console.log('this is req.body', req.body)
   postProduct(req.body, (err, results) => {
     if (err) {
       console.log('erroring in post', err)
       res.status(500) 
       } else {
-      console.log('this is post request data', req.body)
+      // console.log('this is post request data', req.body)
       res.send('post success')
       }
     }
@@ -58,6 +71,7 @@ app.delete('/get/:id', (req, res) => {
   const { id } = req.params;
   deleteProduct(id, (err, results) => {
     if (err) {
+      console.log('error in delete')
       res.status(500).send(err)
     } else {
       res.send('1 product deleted')
@@ -65,9 +79,9 @@ app.delete('/get/:id', (req, res) => {
   })
 })
 
-app.put('/get/:id', (req, res) => {
+app.put('/post/:id', bodyParser(), (req, res) => {
   const {id} = req.params;
-  updateProduct(id, (err, results) => {
+  updateProduct(id, req.body, (err, results) => {
     if (err) {
       res.status(500).send(err)
     } else {
@@ -75,10 +89,6 @@ app.put('/get/:id', (req, res) => {
     }
   })
 })
-
-app.get('/test', (req, res) => {
-  res.send('test');
-});
 
 app.listen(9001, () => {
   console.log(`listening on ${9001}`);

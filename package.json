@@ -9,7 +9,7 @@
     "react-dev": "webpack -d --watch",
     "test": "jest",
     "seed": "node database/seed.js",
-    "generator": "node --max-old-space-size=8000 database/dataGenerator.js & node --max-old-space-size=8000 database/dataGenerator2.js & node --max-old-space-size=8000 database/dataGenerator3.js & node --max-old-space-size=8000 database/dataGenerator4.js & node --max-old-space-size=8000 database/dataGenerator5.js"
+    "generator": "node --max-old-space-size=8000 database/dataGenerators/recursiveCSVDataGen.js"
   },
   "repository": {
     "type": "git",
@@ -25,7 +25,9 @@
     "body-parser": "^1.18.3",
     "csv-stringify": "^4.0.1",
     "csv-write-stream": "^2.0.0",
-    "morgan": "^1.9.1"
+    "morgan": "^1.9.1",
+    "newrelic": "^4.9.0",
+    "pg": "^7.5.0"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",
