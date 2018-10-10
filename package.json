@@ -26,6 +26,7 @@
     "csv-stringify": "^4.0.1",
     "csv-write-stream": "^2.0.0",
     "morgan": "^1.9.1",
+    "newrelic": "^4.9.0",
     "pg": "^7.5.0"
   },
   "devDependencies": {

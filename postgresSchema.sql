@@ -2,7 +2,7 @@
 -- CREATE DATABASE amazontest;
 
 
-DROP SCHEMA IF EXISTS amazonproducts cascade;
+-- DROP SCHEMA IF EXISTS amazonproducts cascade;
 
 CREATE SCHEMA amazonproducts;
 -- SET search_path TO amazonproducts;
