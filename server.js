@@ -4,9 +4,13 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const cors = require('cors');
 const pg = require("pg");
-const newRelic = require("newRelic");
+const newRelic = require("newrelic");
 const app = express();
 const {deleteProduct, updateProduct, getProduct, postProduct} = require('./database/db.js');
+const redis = require("redis")
+const client = redis.createClient(6379, 'ec2-54-183-229-94.us-west-1.compute.amazonaws.com');
+
+
 
 const corsOptions = {
   origin: 'http://localhost:9002',
