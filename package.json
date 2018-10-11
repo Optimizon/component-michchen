@@ -27,7 +27,9 @@
     "csv-write-stream": "^2.0.0",
     "morgan": "^1.9.1",
     "newrelic": "^4.9.0",
-    "pg": "^7.5.0"
+    "pg": "^7.5.0",
+    "redis": "^2.8.0",
+    "redis-cli": "^1.0.2"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",
