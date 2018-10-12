@@ -1,7 +1,9 @@
 var pg = require("pg");
 var connectionString = "postgres://other_user:password@ec2-18-144-34-152.us-west-1.compute.amazonaws.com/amazon";
+const redisClient = require('../redisConnect.js')
 
-var client = new pg.Client(connectionString);
+
+var client = new pg.Client(connectionString); //
 client.connect(function(err) {
   if(err) {
     return console.log(err)
@@ -14,7 +16,7 @@ client.connect(function(err) {
   })
 });
 
-const getProduct = (id, cb) => {
+const getProduct = (id, cb) => { 
   // console.log('exports.getProduct');
   // console.log(`SELECT * FROM products WHERE id=${id}`);
 // console.log('hi')
@@ -25,6 +27,8 @@ const getProduct = (id, cb) => {
     }
     // console.log('selected sucessfully from products');
     // console.log(result);
+       //put results into redis
+       redisClient.setex(id, 12000, JSON.stringify(result)) //redis wants the data as a string
       cb(result);
   });
 };

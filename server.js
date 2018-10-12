@@ -7,10 +7,12 @@ const pg = require("pg");
 const newRelic = require("newrelic");
 const app = express();
 const {deleteProduct, updateProduct, getProduct, postProduct} = require('./database/db.js');
-const redis = require("redis")
-const client = redis.createClient(6379, 'ec2-54-183-229-94.us-west-1.compute.amazonaws.com');
+const redisClient = require('./redisConnect.js')
 
 
+app.use('/loaderio-be963b3932487b936e769094b8e69ce8', (req, res) => {
+        res.sendFile(__dirname + '/loaderio-be963b3932487b936e769094b8e69ce8.txt');
+})
 
 const corsOptions = {
   origin: 'http://localhost:9002',
@@ -25,7 +27,40 @@ app.get('/get', (req, res) => {
   // console.log("got here!")
   // console.log("requessst", req.query.id);
   // req.query is the URL query string, and 'id' is the product id i wish to fetch
-  getProduct(req.query.id, (data) => {
+  redisClient.get(req.query.id, function(err, data){ //making the request to redis and it gets it back as data 
+    if(err) throw err;
+    if(data != null) {
+      var dataFromRedis = JSON.parse(data);
+      const { productname, sellername, ratingsaverage, ratingscount, questionscount, amazonschoice, categoryname, pricelist, price, freereturns, freeshipping, soldbyname, available, hascountdown, description, usedcount, usedprice, id, varkey, varvalue, imageurl } = dataFromRedis.rows[0];
+      var camelCaseData = 
+      { productName: productname,
+        sellerName: sellername,
+        ratingsAverage: ratingsaverage,
+        ratingsCount: ratingscount,
+        questionsCount: questionscount,
+        amazonsChoice: amazonschoice,
+        categoryName: categoryname,
+        priceList: pricelist,
+        price,
+        freeReturns: freereturns,
+        freeShipping: freeshipping,
+        soldByName: soldbyname,
+        available,
+        hasCountdown: hascountdown,
+        description,
+        usedCount: usedcount,
+        usedPrice: usedprice,
+        id,
+        varKey: varkey,
+        varValue: varvalue,
+        imageUrl: imageurl 
+      }
+      console.log(dataFromRedis.rows)
+      res.send(camelCaseData) //put it in the format you want and send it
+    }
+    else {
+
+  getProduct(req.query.id, (data) => { //else go into DB
     res.header('Access-Control-Allow-Origin', '*');
     const { productname, sellername, ratingsaverage, ratingscount, questionscount, amazonschoice, categoryname, pricelist, price, freereturns, freeshipping, soldbyname, available, hascountdown, description, usedcount, usedprice, id, varkey, varvalue, imageurl } = data.rows[0];
     // console.log('this is data.rows', data.rows)
@@ -54,7 +89,9 @@ app.get('/get', (req, res) => {
       }
     res.send(reshapedData);
     // return data.rows[0];
-  });
+  }
+  )
+}})
 });
 
 app.post('/post', bodyParser(), (req, res) => {
